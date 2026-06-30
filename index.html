@@ -206,13 +206,14 @@
       left: 0;
       top: 0;
       z-index: 20000;
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: var(--blue);
+      display: block;
+      width: 17px;
+      height: 25px;
+      object-fit: contain;
       pointer-events: none;
-      transform: translate3d(-50%, -50%, 0);
-      will-change: transform, width, height, opacity;
+      transform: translate3d(0, 0, 0);
+      transform-origin: 0 0;
+      will-change: transform, opacity;
     }
 
     .bubble,
@@ -6317,7 +6318,7 @@
     </div>
   </section>
   <div class="case-fixed-layer" id="caseFixedLayer" aria-hidden="true"></div>
-  <div class="cursor-dot" aria-hidden="true"></div>
+  <img class="cursor-dot" src="assets/components/mouse.svg" alt="" aria-hidden="true" />
   <script>
     const cursorDot = document.querySelector(".cursor-dot");
     let cursorX = window.innerWidth / 2;
@@ -6340,7 +6341,7 @@
     function renderCursor() {
       renderedCursorX += (cursorX - renderedCursorX) * 0.24;
       renderedCursorY += (cursorY - renderedCursorY) * 0.24;
-      cursorDot.style.transform = `translate3d(${renderedCursorX}px, ${renderedCursorY}px, 0) translate(-50%, -50%)`;
+      cursorDot.style.transform = `translate3d(${renderedCursorX}px, ${renderedCursorY}px, 0)`;
       requestAnimationFrame(renderCursor);
     }
     renderCursor();
