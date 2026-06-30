@@ -6070,12 +6070,41 @@
   <script>
     (() => {
       const root=document.documentElement,loader=document.getElementById('siteLoader'),bar=document.getElementById('siteLoaderBar'),percent=document.getElementById('siteLoaderPercent');
-      let value=0,done=false;
+      const started=performance.now(),minimumDuration=3500,maximumDuration=90000;
+      let value=0,target=6,finished=false,completed=0,failed=0;
       const paint=n=>{ n=Math.max(0,Math.min(100,Math.round(n))); bar.style.width=n+'%'; percent.textContent=n+' %'; };
-      const timer=setInterval(()=>{ if(!done){ value=Math.min(92,value+Math.max(.45,(92-value)*.035)); paint(value); } },80);
-      const reveal=()=>{ if(done)return; done=true; clearInterval(timer); const ready=document.fonts&&document.fonts.ready?document.fonts.ready:Promise.resolve(); Promise.resolve(ready).catch(()=>{}).finally(()=>{ paint(100); setTimeout(()=>{ root.classList.remove('is-loading'); root.classList.add('is-loaded'); document.body.setAttribute('aria-busy','false'); setTimeout(()=>loader.remove(),700); },320); }); };
-      if(document.readyState==='complete')reveal(); else window.addEventListener('load',reveal,{once:true});
-      setTimeout(reveal,20000);
+      const progressTimer=setInterval(()=>{ if(!finished){ value=Math.min(target,value+Math.max(.25,(target-value)*.12)); paint(value); } },60);
+      const domReady=new Promise(resolve=>{ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',resolve,{once:true}); else resolve(); });
+      const windowReady=new Promise(resolve=>{ if(document.readyState==='complete')resolve(); else window.addEventListener('load',resolve,{once:true}); });
+      const delay=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+      const loadAsset=async url=>{ const response=await fetch(url,{cache:'force-cache',credentials:'same-origin'}); if(!response.ok)throw new Error(url); await response.arrayBuffer(); };
+      const preloadAssets=async()=>{
+        await domReady;
+        const pattern=/assets\/[A-Za-z0-9_./%+~\-]+\.(?:png|jpe?g|svg|mp4|html|js|css)/gi;
+        const assets=[...new Set(document.documentElement.innerHTML.match(pattern)||[])];
+        loader.dataset.assetCount=String(assets.length);
+        if(!assets.length)return;
+        let cursor=0;
+        const worker=async()=>{ while(cursor<assets.length){ const url=assets[cursor++]; try{ await loadAsset(url); }catch(error){ failed++; } completed++; loader.dataset.loadedCount=String(completed); loader.dataset.failedCount=String(failed); target=8+(completed/assets.length)*89; } };
+        await Promise.all(Array.from({length:Math.min(6,assets.length)},worker));
+      };
+      const reveal=async()=>{
+        if(finished)return;
+        finished=true;
+        clearInterval(progressTimer);
+        const fontsReady=document.fonts&&document.fonts.ready?document.fonts.ready:Promise.resolve();
+        await Promise.resolve(fontsReady).catch(()=>{});
+        const remaining=Math.max(0,minimumDuration-(performance.now()-started));
+        if(remaining)await delay(remaining);
+        paint(100);
+        await delay(650);
+        root.classList.remove('is-loading');
+        root.classList.add('is-loaded');
+        document.body.setAttribute('aria-busy','false');
+        setTimeout(()=>loader.remove(),700);
+      };
+      const allReady=Promise.allSettled([windowReady,preloadAssets()]);
+      Promise.race([allReady,delay(maximumDuration)]).then(reveal);
     })();
   </script>
   <header class="site-header header">
