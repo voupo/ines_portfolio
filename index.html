@@ -6070,7 +6070,7 @@
   <script>
     (() => {
       const root=document.documentElement,loader=document.getElementById('siteLoader'),bar=document.getElementById('siteLoaderBar'),percent=document.getElementById('siteLoaderPercent');
-      const started=performance.now(),minimumDuration=3500,maximumDuration=90000;
+      const started=performance.now(),minimumDuration=1800,maximumDuration=30000;
       let value=0,target=6,finished=false,completed=0,failed=0;
       const paint=n=>{ n=Math.max(0,Math.min(100,Math.round(n))); bar.style.width=n+'%'; percent.textContent=n+' %'; };
       const progressTimer=setInterval(()=>{ if(!finished){ value=Math.min(target,value+Math.max(.25,(target-value)*.12)); paint(value); } },60);
@@ -6080,13 +6080,13 @@
       const loadAsset=async url=>{ const response=await fetch(url,{cache:'force-cache',credentials:'same-origin'}); if(!response.ok)throw new Error(url); await response.arrayBuffer(); };
       const preloadAssets=async()=>{
         await domReady;
-        const pattern=/assets\/[A-Za-z0-9_./%+~\-]+\.(?:png|jpe?g|svg|mp4|html|js|css)/gi;
+        const pattern=/assets\/[A-Za-z0-9_./%+~\-]+\.(?:png|jpe?g|svg|html|js|css)/gi;
         const assets=[...new Set(document.documentElement.innerHTML.match(pattern)||[])];
         loader.dataset.assetCount=String(assets.length);
         if(!assets.length)return;
         let cursor=0;
         const worker=async()=>{ while(cursor<assets.length){ const url=assets[cursor++]; try{ await loadAsset(url); }catch(error){ failed++; } completed++; loader.dataset.loadedCount=String(completed); loader.dataset.failedCount=String(failed); target=8+(completed/assets.length)*89; } };
-        await Promise.all(Array.from({length:Math.min(6,assets.length)},worker));
+        await Promise.all(Array.from({length:Math.min(8,assets.length)},worker));
       };
       const reveal=async()=>{
         if(finished)return;
