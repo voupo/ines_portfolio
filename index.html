@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="zh-CN" class="is-loading">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -6028,9 +6028,56 @@
     .ask-question:active, .ask-question.is-pressing { background-color: var(--blue); color: #fff; transform: translateY(1px) scale(.985); }
     @keyframes askMessageIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
     @media (prefers-reduced-motion: reduce) { .ask-welcome, .ask-questions, .ask-message { transition: none; animation: none; } }
+
+    html.is-loading, html.is-loading body { overflow: hidden; }
+    .site-loader { position:fixed; inset:0; z-index:2147483647; overflow:hidden; background:#fff; color:var(--blue); opacity:1; visibility:visible; transition:opacity .58s cubic-bezier(.16,1,.3,1),visibility 0s linear .58s; }
+    html.is-loaded .site-loader { opacity:0; visibility:hidden; pointer-events:none; }
+    .site-loader__inner { position:absolute; left:7.2vw; right:7.2vw; top:50%; height:106px; transform:translateY(-50%); }
+    .site-loader__brand { position:absolute; left:0; bottom:24px; font-family:"Archivo Black","Arial Black",Arial,sans-serif; font-size:30px; font-weight:900; line-height:.96; letter-spacing:-.035em; }
+    .site-loader__brand span { display:block; }
+    .site-loader__percent { position:absolute; right:0; bottom:20px; font-family:"Archivo Black","Arial Black",Arial,sans-serif; font-size:60px; font-weight:900; line-height:1; letter-spacing:-.04em; }
+    .site-loader__track { position:absolute; left:0; right:0; bottom:0; height:7px; overflow:hidden; background:rgba(7,0,201,.14); }
+    .site-loader__bar { display:block; width:0; height:100%; background:var(--blue); transition:width .18s ease-out; }
+    .site-loader__bubble { position:absolute; display:block; border-radius:50%; pointer-events:none; }
+    .site-loader__bubble--blue { left:11.1%; top:36.1%; width:17px; height:17px; background:#1004c8; }
+    .site-loader__bubble--orange { right:16.7%; top:15.4%; width:14px; height:14px; background:#ff6400; }
+    .site-loader__bubble--blush-top { right:13%; top:31.8%; width:34px; height:34px; background:#fff0f0; }
+    .site-loader__bubble--sky { right:3.6%; top:48.6%; width:14px; height:14px; background:#7be7f2; }
+    .site-loader__bubble--blush-bottom { left:25.8%; bottom:17.9%; width:40px; height:40px; background:#fff0f0; }
+    @media (max-width:700px) {
+      .site-loader__inner { left:8vw; right:8vw; height:94px; }
+      .site-loader__brand { bottom:23px; font-size:22px; }
+      .site-loader__percent { bottom:21px; font-size:42px; }
+      .site-loader__track { right:0; height:7px; }
+      .site-loader__bubble--blush-bottom { left:18%; }
+    }
+    @media (prefers-reduced-motion:reduce) { .site-loader,.site-loader__bar { transition:none; } }
 </style>
 </head>
-<body>
+<body aria-busy="true">
+  <div class="site-loader" id="siteLoader" role="status" aria-live="polite" aria-label="Website loading">
+    <span class="site-loader__bubble site-loader__bubble--blue" aria-hidden="true"></span>
+    <span class="site-loader__bubble site-loader__bubble--orange" aria-hidden="true"></span>
+    <span class="site-loader__bubble site-loader__bubble--blush-top" aria-hidden="true"></span>
+    <span class="site-loader__bubble site-loader__bubble--sky" aria-hidden="true"></span>
+    <span class="site-loader__bubble site-loader__bubble--blush-bottom" aria-hidden="true"></span>
+    <div class="site-loader__inner">
+      <div class="site-loader__brand"><span>BLUEPRINT</span><span>/ INES</span></div>
+      <div class="site-loader__percent" id="siteLoaderPercent">0 %</div>
+      <div class="site-loader__track" aria-hidden="true"><span class="site-loader__bar" id="siteLoaderBar"></span></div>
+    </div>
+  </div>
+  <script>
+    (() => {
+      const root=document.documentElement,loader=document.getElementById('siteLoader'),bar=document.getElementById('siteLoaderBar'),percent=document.getElementById('siteLoaderPercent');
+      let value=0,done=false;
+      const paint=n=>{ n=Math.max(0,Math.min(100,Math.round(n))); bar.style.width=n+'%'; percent.textContent=n+' %'; };
+      const timer=setInterval(()=>{ if(!done){ value=Math.min(92,value+Math.max(.45,(92-value)*.035)); paint(value); } },80);
+      const reveal=()=>{ if(done)return; done=true; clearInterval(timer); const ready=document.fonts&&document.fonts.ready?document.fonts.ready:Promise.resolve(); Promise.resolve(ready).catch(()=>{}).finally(()=>{ paint(100); setTimeout(()=>{ root.classList.remove('is-loading'); root.classList.add('is-loaded'); document.body.setAttribute('aria-busy','false'); setTimeout(()=>loader.remove(),700); },320); }); };
+      if(document.readyState==='complete')reveal(); else window.addEventListener('load',reveal,{once:true});
+      setTimeout(reveal,20000);
+    })();
+  </script>
   <header class="site-header header">
     <a class="brand" href="#">BLUEPRINT<br>/ INES</a>
     <a class="nav-item nav-project spotlight-target" href="#work">Project <span>项目</span></a>
