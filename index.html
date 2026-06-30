@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8" />
@@ -1068,14 +1068,14 @@
     /* Profile */
     .profile-page {
       width: 100vw;
-      height: calc(1280px * var(--page-scale, 1));
+      height: calc(1650px * var(--page-scale, 1));
       background: #f6f6f6;
       overflow: hidden;
     }
 
     .profile-page .canvas {
       left: 50%;
-      height: 1280px;
+      height: 1650px;
       background: #f6f6f6;
       overflow: hidden;
       transform: translateX(-50%) scale(var(--page-scale, 1));
@@ -1086,7 +1086,7 @@
       left: 50%;
       top: 84.11px;
       width: 1200px;
-      min-height: 1160px;
+      min-height: 1550px;
       transform: translateX(-50%);
       border: 1.5px solid var(--blue);
       border-radius: 60px;
@@ -1153,6 +1153,13 @@
       white-space: nowrap;
       overflow: hidden;
       padding: 0 22px;
+      cursor: pointer;
+      text-decoration: none;
+      z-index: 3;
+      pointer-events: auto;
+      transform-origin: center;
+      will-change: transform;
+      transition: background .18s ease, color .18s ease, box-shadow .18s ease, transform .18s ease;
     }
 
     .profile-download-track {
@@ -1160,7 +1167,26 @@
       gap: 34px;
       min-width: max-content;
       animation: profileDownloadMarquee 4.8s linear infinite;
+      pointer-events: none;
     }
+
+    .profile-download:hover,
+    .profile-download:focus-visible {
+      outline: none;
+      box-shadow: 0 8px 22px transparent;
+      transform: translateY(-3px);
+    }
+
+    .profile-download:hover .profile-download-track,
+    .profile-download:focus-visible .profile-download-track,
+    .profile-download:active .profile-download-track {
+      animation-play-state: paused;
+    }
+
+    .profile-download:active {
+      transform: translateY(-1px) scale(.98);
+    }
+
 
     @keyframes profileDownloadMarquee {
       from {
@@ -1265,6 +1291,97 @@
       height: 18px;
       display: block;
       object-fit: contain;
+    }
+
+    .profile-work-group {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .profile-work-list {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      width: 100%;
+    }
+
+    .profile-work-item {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 150px;
+      column-gap: 24px;
+      row-gap: 14px;
+      width: 100%;
+      color: #111;
+    }
+
+    .profile-work-meta {
+      margin: 0 0 2px;
+      color: #8c8c8c;
+      font-size: 16px;
+      line-height: 1.35;
+      font-weight: 400;
+    }
+
+    .profile-work-role,
+    .profile-work-company {
+      margin: 0;
+      color: #111;
+      font-size: 18px;
+      line-height: 1.35;
+      font-weight: 600;
+    }
+
+    .profile-work-role {
+      grid-column: 1;
+      grid-row: 2;
+      align-self: start;
+    }
+
+    .profile-work-main {
+      display: contents;
+    }
+
+    .profile-work-company-block {
+      display: contents;
+      text-align: right;
+    }
+
+    .profile-work-city {
+      grid-column: 2;
+      grid-row: 1;
+      margin: 0 0 2px;
+      color: #8c8c8c;
+      font-size: 16px;
+      line-height: 1.35;
+      font-weight: 400;
+      text-align: right;
+    }
+
+    .profile-work-company {
+      grid-column: 2;
+      grid-row: 2;
+      text-align: right;
+      align-self: start;
+    }
+
+    .profile-work-desc {
+      grid-column: 1 / -1;
+      grid-row: 3;
+      margin: 5px 0 0;
+      color: #111;
+      font-size: 16px;
+      line-height: 1.38;
+      font-weight: 400;
+    }
+
+    .profile-work-desc p {
+      margin: 0;
+    }
+
+    .profile-work-desc strong {
+      font-weight: 700;
     }
 
     .profile-project-row {
@@ -1410,7 +1527,7 @@
 
     .profile-detail-inner {
       width: calc(1440px * var(--page-scale, 1));
-      min-height: calc(1268px * var(--page-scale, 1));
+      min-height: calc(1650px * var(--page-scale, 1));
       margin: 0 auto;
     }
 
@@ -1418,7 +1535,7 @@
       position: relative;
       left: 50%;
       width: 1440px;
-      min-height: 1268px;
+      min-height: 1650px;
       margin: 0 auto;
       overflow: hidden;
       background: #f6f6f6;
@@ -1430,7 +1547,7 @@
       left: 50%;
       top: 84.11px;
       width: 1200px;
-      min-height: 1160px;
+      min-height: 1550px;
       transform: translateX(-50%);
     }
 
@@ -1524,7 +1641,7 @@
       padding-bottom: 0;
     }
 
-    .detail-overlay.is-open {
+.detail-overlay.is-open {
       opacity: 1;
       pointer-events: auto;
     }
@@ -1631,20 +1748,26 @@
       top: var(--y);
       border-radius: 50%;
       background: var(--c);
-      opacity: .92;
-      animation: caseBubbleFloat var(--dur, 18s) linear infinite;
+      opacity: var(--o, .92);
+      box-shadow: 0 12px 28px rgba(10, 0, 193, .08);
+      animation: caseBubbleFloat var(--dur, 34s) linear infinite;
       animation-delay: var(--delay, 0s);
+      will-change: transform, opacity;
+    }
+
+    .case-bubble--soft {
+      filter: blur(.2px);
+      opacity: var(--o, .52);
     }
 
     @keyframes caseBubbleFloat {
-      from {
-        transform: translate3d(0, 80px, 0);
+      0% {
+        transform: translate3d(0, 140px, 0) scale(var(--scale, 1));
       }
-      to {
-        transform: translate3d(var(--drift, 12px), -260px, 0);
+      100% {
+        transform: translate3d(var(--drift, 12px), -1180px, 0) scale(var(--scale, 1));
       }
     }
-
     .case-detail-header {
       position: fixed;
       left: 50%;
@@ -3056,7 +3179,7 @@
     .case-page--screen .case-more-projects,
     .case-page--lake .case-more-projects {
       width: 1055.578px;
-      margin: 96px auto 0;
+      margin: 50px auto 0;
     }
 
     .case-page--screen .case-more-grid,
@@ -3490,7 +3613,7 @@
     .ai-figma-goals {
       width: 659px;
       max-width: 100%;
-      margin: 20px auto 0;
+      margin: 40px auto 0;
       text-align: left;
     }
 
@@ -4105,7 +4228,7 @@
 
     .case-page--ai-figma .case-more-projects {
       width: 918px;
-      margin: 65px auto 0;
+      margin: 50px auto 0;
     }
     .case-page--ai-figma .case-more-projects h2 {
       margin-bottom: 40px;
@@ -4340,17 +4463,6 @@
       background: #fff;
       color: #000;
       box-sizing: border-box;
-    }
-    .case-page--popup-figma .popup-figma-card::before {
-      content: "";
-      position: fixed;
-      left: 125px;
-      top: 448px;
-      width: 210px;
-      height: 70px;
-      background: #fff;
-      z-index: 30;
-      pointer-events: none;
     }
 .popup-figma-card-top {
       width: 990.75px;
@@ -4844,7 +4956,7 @@
 
     .case-page--popup-figma .case-more-projects {
       width: 1055.578px;
-      margin: 96px auto 0;
+      margin: 40px auto 0;
     }
     .case-page--popup-figma .case-more-projects h2 {
       margin-bottom: 48px;
@@ -5241,7 +5353,7 @@
       width: 660px;
       max-width: 100%;
       height: 140px;
-      margin: 20px auto 0;
+      margin: 40px auto 0;
       border-radius: 20px;
       background: #f6f6f6;
           display: flex;
@@ -5260,7 +5372,7 @@
     .type-figma-shot-image {
       width: 660px;
       max-width: 100%;
-      margin: 20px auto 0;
+      margin: 40px auto 0;
     }
 
     .type-figma-shot-image img {
@@ -5416,7 +5528,7 @@
 
     .case-page--type-figma .case-more-projects {
       width: 918px;
-      margin: 65px auto 0;
+      margin: 40px auto 0;
     }
     .case-page--type-figma .case-more-projects h2 {
       margin-bottom: 48px;
@@ -5595,7 +5707,7 @@
 
     .case-more-projects--screen {
       width: 1055.578px;
-      margin: 96px auto 0;
+      margin: 40px auto 0;
     }
 
     .case-more-projects--screen h2 {
@@ -5604,7 +5716,7 @@
 
     .case-more-projects--lake {
       width: 1055.578px;
-      margin: 96px auto 0;
+      margin: 40px auto 0;
       padding-bottom: 100px;
     }
 
@@ -5778,7 +5890,7 @@
   .project-hover-card .project-image--smart-card { transform: scale(.9); transform-origin: center center; }
 
     /* Vibe Coding detail page */
-    .case-page--vibe{width:1080px}
+    .case-page--vibe{width:1080px;padding-bottom:140px}
     .vibe-page{width:660px;margin:0 auto;padding:54px 0 84px;color:#040404;font-size:16px;line-height:1.55}
     .vibe-hero{display:flex;flex-direction:column;gap:42px;padding:26px 0 20px}
     .vibe-hero h1{margin:0;color:#0a00c1;font-size:38px;font-weight:600;line-height:1.2;text-align:center;letter-spacing:0}
@@ -5794,7 +5906,7 @@
     .vibe-video{display:grid;min-height:349px;place-items:center;color:#444;text-align:center}.vibe-video strong{display:block;margin-bottom:8px;font-weight:500}.vibe-video--media{display:block;min-height:0;overflow:hidden;background:transparent}.vibe-video--media video{display:block;width:100%;height:auto;border-radius:16px}
     .vibe-features{gap:7px}.vibe-under{font-weight:500;text-decoration:underline;text-underline-offset:3px}
     .vibe-flow{display:grid;grid-template-columns:1fr auto 1.2fr auto 1.2fr;gap:10px;align-items:center;min-height:169px;padding:24px;text-align:center}.vibe-flow b{color:#0a00c1;font-size:36px;font-weight:400}
-    .vibe-more{width:1080px;margin:84px auto 0;padding-bottom:100px}
+    .vibe-more{width:1080px;margin:50px auto 0;padding-bottom:100px}
     .case-more-projects--vibe .case-more-card{width:297px;height:390px;min-height:390px}
     .aidesign-more {
       width: 1080px;
@@ -7007,7 +7119,7 @@
                     <div class="case-flow-side">${row.label}</div>
                     <div class="case-flow-chip-row">
                       ${row.chips.map((chip, chipIndex) => `
-                        ${chipIndex > 0 ? `<span class="case-flow-arrow">�?/span>` : ""}
+                        ${chipIndex > 0 ? `<span class="case-flow-arrow">→</span>` : ""}
                         <span class="case-flow-chip">${chip}</span>
                       `).join("")}
                     </div>
@@ -7095,17 +7207,43 @@
       `;
     }
 
+    function renderCaseBubbles(seed = "default") {
+      const palettes = {
+        ai: ["#0a00c1", "#72c9ef", "#ff6400", "#fff3f3", "#cfe4ff"],
+        type: ["#0a00c1", "#72c9ef", "#fff3f3", "#ffcc32", "#cfe4ff"],
+        popup: ["#0a00c1", "#ff6400", "#fff3f3", "#72c9ef", "#cfe4ff"],
+        vibe: ["#0a00c1", "#72c9ef", "#9587e9", "#fff3f3", "#ffcc32"],
+        screen: ["#0a00c1", "#72c9ef", "#ff6400", "#fff3f3", "#cfe4ff"],
+        lake: ["#0a00c1", "#72c9ef", "#ff6400", "#fff3f3", "#9587e9"],
+        default: ["#0a00c1", "#72c9ef", "#ff6400", "#fff3f3", "#cfe4ff", "#ffcc32"]
+      };
+      const colors = palettes[seed] || palettes.default;
+      const layout = [
+        [7, 110, 13, 34, -8, 22], [86, 220, 24, 38, -20, -18], [16, 430, 8, 31, -15, 14], [72, 560, 12, 36, -26, -24],
+        [93, 790, 9, 33, -11, -16], [25, 960, 18, 40, -30, 20], [11, 1220, 7, 29, -18, 12], [82, 1390, 13, 35, -7, -20],
+        [35, 1640, 10, 37, -24, 18], [91, 1880, 18, 42, -33, -22], [6, 2120, 11, 34, -13, 16], [76, 2360, 8, 30, -21, -14],
+        [19, 2620, 15, 39, -4, 24], [88, 2920, 9, 32, -29, -18], [43, 3180, 12, 36, -17, 20], [10, 3460, 8, 31, -25, 12],
+        [79, 3720, 16, 41, -9, -24], [28, 4010, 10, 35, -31, 18], [94, 4320, 7, 29, -14, -12], [14, 4680, 19, 44, -36, 22],
+        [69, 5020, 9, 33, -19, -16], [31, 5360, 12, 38, -27, 20], [84, 5740, 8, 30, -6, -18], [8, 6120, 11, 34, -23, 14],
+        [55, 6480, 15, 40, -16, -20], [92, 6860, 10, 36, -34, -16], [21, 7240, 8, 31, -12, 12], [74, 7680, 20, 45, -28, -22]
+      ];
+      return `
+        <div class="case-bubble-layer" aria-hidden="true">
+          ${layout.map((item, index) => {
+            const [x, y, size, dur, delay, drift] = item;
+            const color = colors[index % colors.length];
+            const soft = color === "#fff3f3" || color === "#cfe4ff";
+            const opacity = soft ? ".62" : ".92";
+            const scale = index % 5 === 1 ? "1.08" : index % 5 === 3 ? ".88" : "1";
+            return `<span class="case-bubble${soft ? " case-bubble--soft" : ""}" style="--x:${x}%; --y:${y}px; --s:${size}px; --c:${color}; --dur:${dur}s; --delay:${delay}s; --drift:${drift}px; --o:${opacity}; --scale:${scale};"></span>`;
+          }).join("")}
+        </div>
+      `;
+    }
     function renderAiReviewFigmaPage(project) {
       return `
         <div class="case-stage">
-          <div class="case-bubble-layer" aria-hidden="true">
-            <span class="case-bubble" style="--x: 14%; --y: 980px; --s: 10px; --c: #0a00c1; --dur: 24s; --delay: -5s; --drift: 12px;"></span>
-            <span class="case-bubble" style="--x: 83%; --y: 1280px; --s: 16px; --c: #fff3f3; --dur: 22s; --delay: -9s; --drift: -14px;"></span>
-            <span class="case-bubble" style="--x: 10%; --y: 2280px; --s: 8px; --c: #72c9ef; --dur: 20s; --delay: -13s; --drift: 10px;"></span>
-            <span class="case-bubble" style="--x: 88%; --y: 3410px; --s: 11px; --c: #0a00c1; --dur: 26s; --delay: -7s; --drift: -18px;"></span>
-            <span class="case-bubble" style="--x: 18%; --y: 4890px; --s: 9px; --c: #ff6400; --dur: 18s; --delay: -4s; --drift: 16px;"></span>
-            <span class="case-bubble" style="--x: 79%; --y: 5920px; --s: 12px; --c: #72c9ef; --dur: 25s; --delay: -11s; --drift: -12px;"></span>
-          </div>
+          ${renderCaseBubbles("ai")}
 
           <main class="case-page case-page--ai-figma">
             <article class="ai-figma-card">
@@ -7300,6 +7438,7 @@
     function renderTypeFigmaPage(project) {
       return `
         <div class="case-stage">
+          ${renderCaseBubbles("type")}
           <main class="case-page case-page--type-figma">
             <article class="type-figma-card">
               <div class="type-figma-card-top">
@@ -7379,12 +7518,7 @@
     function renderPopupModulePage(project) {
       return `
         <div class="case-stage">
-          <div class="case-bubble-layer" aria-hidden="true">
-            <span class="case-bubble" style="--x: 16%; --y: 1120px; --s: 10px; --c: #0a00c1; --dur: 24s; --delay: -5s; --drift: 14px;"></span>
-            <span class="case-bubble" style="--x: 84%; --y: 1320px; --s: 16px; --c: #fff3f3; --dur: 22s; --delay: -9s; --drift: -16px;"></span>
-            <span class="case-bubble" style="--x: 11%; --y: 2280px; --s: 8px; --c: #72c9ef; --dur: 20s; --delay: -13s; --drift: 10px;"></span>
-            <span class="case-bubble" style="--x: 88%; --y: 2860px; --s: 11px; --c: #0a00c1; --dur: 26s; --delay: -7s; --drift: -18px;"></span>
-          </div>
+          ${renderCaseBubbles("popup")}
           <main class="case-page case-page--popup-figma">
             <article class="popup-figma-card">
               <div class="popup-figma-card-top">
@@ -7469,6 +7603,7 @@
 
       return `
         <div class="case-stage">
+          ${renderCaseBubbles("screen")}
           <main class="case-page case-page--screen-detail">
             <article class="screen-detail-card">
               <div class="screen-detail-card-top">
@@ -7537,7 +7672,7 @@
         const isProfile = projectDetailInner.classList.contains("profile-detail-inner");
         const isAidesign = Boolean(projectDetailInner.querySelector(".aidesign-more"));
         const isLake = Boolean(projectDetailInner.querySelector(".case-stage--lake"));
-        const baseHeight = isProfile ? 1268 : 2200;
+        const baseHeight = isProfile ? 1650 : 2200;
         const height = isProfile
           ? Math.max(baseHeight, projectDetailInner.scrollHeight)
           : Math.max(baseHeight, projectDetailInner.scrollHeight + (isAidesign || isLake ? 0 : 120));
@@ -7767,7 +7902,7 @@
               </button>
             </div>
 
-            <a class="profile-download" href="殷诚一_1年工作经验_简历.pdf" download="殷诚一_1年工作经验_简历.pdf" aria-label="下载简历">
+            <a class="profile-download" href="resume.pdf" download="殷诚一_1年工作经验_简历.pdf" aria-label="下载简历">
               <span class="profile-download-track" aria-hidden="true">
                 <span>下载简历&nbsp;&nbsp;Download</span>
                 <span>下载简历&nbsp;&nbsp;Download</span>
@@ -7804,17 +7939,41 @@
                 </div>
               </section>
 
-              <section class="profile-info-group" aria-labelledby="profileWorkTitle">
+              <section class="profile-info-group profile-work-group" aria-labelledby="profileWorkTitle">
                 <h2 class="profile-info-title" id="profileWorkTitle">工作经历 Work Experience</h2>
-                <div class="profile-info-lines">
-                  <div class="profile-info-line">
-                    <span>2025.08-2026.01</span>
-                    <span>科远智慧有限公司</span>
-                  </div>
-                  <div class="profile-info-line">
-                    <span>2026.02-2026.04</span>
-                    <span>金山软件有限公司</span>
-                  </div>
+                <div class="profile-work-list">
+                  <article class="profile-work-item">
+                    <div class="profile-work-main">
+                      <p class="profile-work-meta">2025.08–2026.01</p>
+                      <h3 class="profile-work-role">UI/UX设计师</h3>
+                      <div class="profile-work-desc">
+                        <p><strong>全流程设计：</strong>根据部门设计管理流程要求输出智慧大屏/OA 系统等 4 个项目的低保真原型方案、高保真方案，配合开发切图标注，验收界面，提交验收报告，配合开发整改通过。</p>
+                        <p><strong>交互优化：</strong>根据产品经理原型要求补充状态展示、流程跳转等交互界面，提升产品使用流畅度。</p>
+                        <p><strong>设计资产管理：</strong>执行、梳理、整合组件资源丰富补充在线文档，组件库。</p>
+                      </div>
+                    </div>
+                    <div class="profile-work-company-block">
+                      <p class="profile-work-city">南京</p>
+                      <p class="profile-work-company">科远智慧有限公司</p>
+                    </div>
+                  </article>
+
+                  <article class="profile-work-item">
+                    <div class="profile-work-main">
+                      <p class="profile-work-meta">2026.02–2026.04</p>
+                      <h3 class="profile-work-role">UI/UX设计师</h3>
+                      <div class="profile-work-desc">
+                        <p><strong>交互优化：</strong>参与 WPS 增值应用中审查类 3 个项目功能的流程优化，梳理功能入口、操作路径、结果展示、用户确认与反馈机制，并输出交互说明，配合产品与研发推进功能上线。</p>
+                        <p><strong>设计验收与走查：</strong>跟进了 7 个自身负责项目的设计验收与视觉走查，除此以外，还参与 WPS 整体软件图标规范检查、多主题多系统适配检查及国际版界面的设计一致性走查，及时发现并推动修复视觉与交互问题，保障产品体验的一致性。</p>
+                        <p><strong>竞品分析：</strong>针对 PDF 相关功能进行竞品研究，分析同类产品的信息架构、功能路径、交互模式与页面布局，输出竞品分析文档，为功能优化提供设计依据。</p>
+                        <p><strong>AI 理解与使用：</strong>参与 AI 审查类相关设计，并在设计过程中结合 AI 工具辅助资料整理、方案发散与图标/视觉表达探索，提升 AI 产品设计与 AI 工具使用能力。</p>
+                      </div>
+                    </div>
+                    <div class="profile-work-company-block">
+                      <p class="profile-work-city">珠海</p>
+                      <p class="profile-work-company">金山软件有限公司</p>
+                    </div>
+                  </article>
                 </div>
               </section>
 
@@ -7901,7 +8060,7 @@
       const table1 = `<div class="vibe-table-image"><img src="assets/components/vibecoding/excel2.svg" alt="竞品分析表格" style="display:block;width:100%;height:auto"></div>`;
       const table2 = `<div class="vibe-table-image"><img src="assets/components/vibecoding/excel4.svg" alt="AI 记录协同竞品分析表格" style="display:block;width:100%;height:auto"></div>`;
       return `
-        <div class="case-stage case-stage--vibe"><main class="case-page case-page--vibe">
+        <div class="case-stage case-stage--vibe">${renderCaseBubbles("vibe")}<main class="case-page case-page--vibe">
           <div class="case-topline"><span class="case-pill">${project.category}</span><button class="case-arrow" id="projectDetailClose" type="button" aria-label="关闭项目"><img src="assets/components/close.svg" alt=""></button></div>
           <article class="vibe-page">
             <header class="vibe-hero"><h1>${project.heading}</h1><p>${project.desc}</p></header>
@@ -7967,22 +8126,7 @@
           ? renderAidesignPage(renderedProject)
           : `
             <div class="case-stage case-stage--${projectKey}">
-              <div class="case-bubble-layer" aria-hidden="true">
-                <span class="case-bubble" style="--x: 18%; --y: 760px; --s: 12px; --c: #0a00c1; --dur: 20s; --delay: -4s; --drift: 18px;"></span>
-                <span class="case-bubble" style="--x: 76%; --y: 940px; --s: 18px; --c: #fff3f3; --dur: 24s; --delay: -10s; --drift: -22px;"></span>
-                <span class="case-bubble" style="--x: 9%; --y: 1520px; --s: 8px; --c: #72c9ef; --dur: 18s; --delay: -7s; --drift: 14px;"></span>
-                <span class="case-bubble" style="--x: 84%; --y: 2120px; --s: 11px; --c: #ff6400; --dur: 22s; --delay: -2s; --drift: -18px;"></span>
-                <span class="case-bubble" style="--x: 28%; --y: 2960px; --s: 14px; --c: #9587e9; --dur: 26s; --delay: -13s; --drift: 20px;"></span>
-                <span class="case-bubble" style="--x: 70%; --y: 3860px; --s: 9px; --c: #0a00c1; --dur: 21s; --delay: -8s; --drift: -12px;"></span>
-                <span class="case-bubble" style="--x: 14%; --y: 1180px; --s: 10px; --c: #fff3f3; --dur: 23s; --delay: -15s; --drift: -16px;"></span>
-                <span class="case-bubble" style="--x: 88%; --y: 1480px; --s: 8px; --c: #72c9ef; --dur: 19s; --delay: -5s; --drift: 15px;"></span>
-                <span class="case-bubble" style="--x: 22%; --y: 2280px; --s: 7px; --c: #ffcc32; --dur: 25s; --delay: -11s; --drift: 10px;"></span>
-                <span class="case-bubble" style="--x: 80%; --y: 2680px; --s: 13px; --c: #0a00c1; --dur: 27s; --delay: -18s; --drift: -20px;"></span>
-                <span class="case-bubble" style="--x: 11%; --y: 3440px; --s: 9px; --c: #ff6400; --dur: 22s; --delay: -9s; --drift: 18px;"></span>
-                <span class="case-bubble" style="--x: 91%; --y: 4380px; --s: 15px; --c: #fff3f3; --dur: 28s; --delay: -20s; --drift: -14px;"></span>
-                <span class="case-bubble" style="--x: 17%; --y: 5120px; --s: 8px; --c: #9587e9; --dur: 24s; --delay: -12s; --drift: 12px;"></span>
-                <span class="case-bubble" style="--x: 78%; --y: 6200px; --s: 10px; --c: #72c9ef; --dur: 26s; --delay: -6s; --drift: -16px;"></span>
-              </div>
+              ${renderCaseBubbles(projectKey)}
               <main class="case-page case-page--${projectKey}">
                 <div class="case-topline">
                   <span class="case-pill">${renderedProject.category || "Project"}</span>
@@ -8878,6 +9022,15 @@ You might need to use a local HTTP server (instead of file://): https://reactjs.
   </script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
 
 
 
